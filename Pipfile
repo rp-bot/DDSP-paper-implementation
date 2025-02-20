@@ -6,8 +6,8 @@ name = "pypi"
 [packages]
 crepe = "*"
 scipy = "*"
-tensorflow = {extras = ["and-cuda"], version = "*"}
 pandas = "*"
+tqdm = "*"
 
 [dev-packages]
 

@@ -1,5 +1,6 @@
 import pandas as pd
 import os
+from tqdm import tqdm
 
 # selected_instruments = ["strings, brass, woodwinds, and mallets"]
 TRAIN_DIR = "/media/rpbot/Server Grade Disk 1/ML_datasets/NSYNTH/nsynth-train.jsonwav/nsynth-train/audio"
@@ -7,7 +8,7 @@ VAL_DIR = "/media/rpbot/Server Grade Disk 1/ML_datasets/NSYNTH/nsynth-valid.json
 TEST_DIR = "/media/rpbot/Server Grade Disk 1/ML_datasets/NSYNTH/nsynth-test.jsonwav/nsynth-test/audio"
 
 
-def make_csv_annotations(root_dir):
+def make_csv_annotations(root_dir, output_file_name):
     allowed_instruments = {"brass", "flute", "mallet", "string"}
 
     # List to collect file data
@@ -15,7 +16,7 @@ def make_csv_annotations(root_dir):
 
     # Walk through the directory recursively
     for subdir, dirs, files in os.walk(root_dir):
-        for file in files:
+        for file in tqdm(files, desc="Processing files"):
             # Ignore files starting with "synth_lead"
             if file.lower().startswith("synth_lead"):
                 continue
@@ -47,11 +48,11 @@ def make_csv_annotations(root_dir):
     df = pd.DataFrame(data)
     print(len(df))
     # Write the DataFrame to a CSV file
-    output_csv = "train_data_annotations.csv"
+    output_csv = f"{output_file_name}.csv"
     df.to_csv(output_csv, index=False)
 
 
 if __name__ == "__main__":
-    make_csv_annotations(TRAIN_DIR)
-    make_csv_annotations(VAL_DIR)
-    make_csv_annotations(TEST_DIR)
+    make_csv_annotations(TRAIN_DIR, "train_data_annotations")
+    # make_csv_annotations(VAL_DIR, "val_data_annotations")
+    # make_csv_annotations(TEST_DIR, "test_data_annotations")
